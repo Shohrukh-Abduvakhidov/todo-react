@@ -8,14 +8,16 @@ export const ApiUrl = import.meta.env.VITE_APITODOS_URL
 const App = () => {
   const [todos, setTodos] = useState([])
   const [seeAll, setSeeAll] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   async function getTodos() {
     try {
+      setLoading(true)
       const { data } = await axios.get(ApiUrl)
       setTodos(data)
       setLoading(false)
     } catch (error) {
       console.error(error)
+      setLoading(false)
     }
   }
 
@@ -45,7 +47,9 @@ const App = () => {
               <Loading />
             ) : (
               (seeAll ? todos : todos.slice(0, 10))?.length === 0 ? (
-                <p>Not found</p>
+                <div className='fixed flex items-center justify-center inset-0'>
+                  <p className='text-7xl font-bold text-center fixed text-red-500'>Not found</p>
+                </div>
               ) : (
                 (seeAll ? todos : todos.slice(0, 10)).map((todo) => (
                   <Todo key={todo.id} todo={todo} getTodos={getTodos} />
