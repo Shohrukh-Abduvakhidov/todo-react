@@ -9,20 +9,21 @@ const App = () => {
   const [todos, setTodos] = useState([])
   const [seeAll, setSeeAll] = useState(false)
   const [loading, setLoading] = useState(false)
-  async function getTodos() {
+  async function getTodos(isLoading = false) {
+    if(isLoading) setLoading(true)
     try {
-      setLoading(true)
       const { data } = await axios.get(ApiUrl)
       setTodos(data)
-      setLoading(false)
     } catch (error) {
       console.error(error)
       setLoading(false)
+    } finally {
+      if (isLoading) setLoading(false)
     }
   }
 
   useEffect(() => {
-    getTodos()
+    getTodos(true)
   }, [])
 
   return (
